@@ -1,8 +1,22 @@
+buildscript {
+    repositories {
+        google()
+    }
+
+    dependencies {
+        classpath("com.google.firebase:firebase-appdistribution-gradle:1.4.1")
+    }
+}
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("android.extensions")
+
+    id("com.google.gms.google-services")
 }
+
+apply(plugin = "com.google.firebase.appdistribution")
 
 android {
     compileSdkVersion(Apps.compileSdk)
@@ -33,6 +47,8 @@ dependencies {
     implementation(Libs.constraintLayout)
     implementation(Libs.lifecycleExtensions)
     implementation(Libs.lifecycleViewModelKtx)
+
+    implementation(Libs.firebaseAnalytics)
 
     testImplementation(TestLibs.junit)
 

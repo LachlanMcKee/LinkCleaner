@@ -25,6 +25,8 @@ object Libs {
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
     const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.androidLifecycle}"
     const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidLifecycle}"
+
+    const val firebaseAnalytics = "com.google.firebase:firebase-analytics:17.4.2"
 }
 
 object TestLibs {
