@@ -27,7 +27,7 @@ android {
         applicationId = "net.lachlanmckee.linkcleaner"
         minSdkVersion(Apps.minSdk)
         targetSdkVersion(Apps.targetSdk)
-        versionCode = Apps.versionCode
+        versionCode = System.getenv("BITRISE_BUILD_NUMBER")?.toInt() ?: 1
         versionName = Apps.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
