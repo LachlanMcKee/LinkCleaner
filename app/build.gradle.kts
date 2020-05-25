@@ -5,6 +5,7 @@ buildscript {
 
     dependencies {
         classpath("com.google.firebase:firebase-appdistribution-gradle:1.4.1")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}")
     }
 }
 
@@ -17,6 +18,7 @@ plugins {
 }
 
 apply(plugin = "com.google.firebase.appdistribution")
+apply(plugin = "androidx.navigation.safeargs.kotlin")
 
 android {
     compileSdkVersion(Apps.compileSdk)
@@ -48,10 +50,14 @@ dependencies {
     implementation(Libs.lifecycleExtensions)
     implementation(Libs.lifecycleViewModelKtx)
 
+    implementation(Libs.navigationFragmentKtx)
+    implementation(Libs.navigationUiKtx)
+
     implementation(Libs.firebaseAnalytics)
 
     testImplementation(TestLibs.junit)
 
     androidTestImplementation(EspressoLibs.junit)
     androidTestImplementation(EspressoLibs.espressoCore)
+    androidTestImplementation(EspressoLibs.navigation)
 }
