@@ -1,7 +1,8 @@
-package net.lachlanmckee.linkcleaner
+package net.lachlanmckee.linkcleaner.feature.settings
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import net.lachlanmckee.linkcleaner.AbstractBindingFragment
 import net.lachlanmckee.linkcleaner.databinding.SettingsBinding
 
 class SettingsFragment : AbstractBindingFragment<SettingsBinding>() {
