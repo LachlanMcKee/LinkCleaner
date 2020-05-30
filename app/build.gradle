@@ -1,0 +1,73 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    def dependenciesConfig = rootProject.extensions.getByName("ext")
+
+    dependencies {
+        classpath("com.google.firebase:firebase-appdistribution-gradle:1.4.1")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${dependenciesConfig.versions.navigation}")
+    }
+}
+
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.google.firebase.appdistribution"
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply from: "${project.rootDir}/dependencies.gradle"
+
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId = "net.lachlanmckee.linkcleaner"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode = System.getenv("BITRISE_BUILD_NUMBER")?.toInteger() ?: 1
+        versionName = "0.0.1"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation(libs.kotlin)
+    implementation(libs.appcompat)
+    implementation(libs.coreKtx)
+    implementation(libs.constraintLayout)
+    implementation(libs.lifecycleExtensions)
+    implementation(libs.lifecycleViewModelKtx)
+
+    implementation(libs.navigationFragmentKtx)
+    implementation(libs.navigationUiKtx)
+
+    implementation(libs.firebaseAnalytics)
+
+    kapt(libs.daggerCompiler)
+    kapt(libs.daggerAndroidProcessor)
+    implementation(libs.dagger)
+    implementation(libs.daggerAndroid)
+
+    testImplementation(testLibs.junit)
+
+    androidTestImplementation(espressoLibs.junit)
+    androidTestImplementation(espressoLibs.espressoCore)
+    androidTestImplementation(espressoLibs.navigation)
+}
