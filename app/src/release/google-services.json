@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "597787947396",
+    "firebase_url": "https://link-cleaner.firebaseio.com",
+    "project_id": "link-cleaner",
+    "storage_bucket": "link-cleaner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597787947396:android:8f0f241f59a4c17a35add1",
+        "android_client_info": {
+          "package_name": "net.lachlanmckee.linkcleaner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597787947396-tmmee3of12upkll27vnpe9rk10j9evn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdkwA2-HOBSSVdHQdxW0m0qAbnGexZgpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597787947396-tmmee3of12upkll27vnpe9rk10j9evn8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
