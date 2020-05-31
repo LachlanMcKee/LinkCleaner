@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding
 
 abstract class AbstractBindingFragment<T : ViewBinding> : Fragment() {
     private var _binding: T? = null
-    private val binding: T
+    val binding: T
         get() = requireNotNull(_binding) { "Binding was accessed after view destroyed" }
 
     abstract fun createBinding(inflater: LayoutInflater, container: ViewGroup?): T
