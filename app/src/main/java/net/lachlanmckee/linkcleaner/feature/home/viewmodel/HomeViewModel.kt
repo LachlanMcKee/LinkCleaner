@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import net.lachlanmckee.linkcleaner.service.repository.LinkRepository
 import okhttp3.HttpUrl
-import java.util.*
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -17,11 +16,11 @@ class HomeViewModel @Inject constructor(
         .getLink()
         .asLiveData(viewModelScope.coroutineContext)
 
-    val httpUrl: LiveData<Optional<HttpUrl>>
+    val httpUrl: LiveData<HttpUrl?>
         get() = _httpUrl
 
     fun updateLink() {
-        val currentHttpUrl: Optional<HttpUrl> = _httpUrl.value ?: Optional.empty()
-        currentHttpUrl.ifPresent(linkRepository::updateLink)
+        val currentHttpUrl: HttpUrl? = _httpUrl.value
+        currentHttpUrl?.apply(linkRepository::updateLink)
     }
 }

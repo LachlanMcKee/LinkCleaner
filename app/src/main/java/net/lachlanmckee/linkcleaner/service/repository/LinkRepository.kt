@@ -7,11 +7,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import java.util.*
 import javax.inject.Inject
 
 interface LinkRepository {
-    fun getLink(): Flow<Optional<HttpUrl>>
+    fun getLink(): Flow<HttpUrl?>
     fun updateLink(httpUrl: HttpUrl)
 }
 
@@ -21,9 +20,9 @@ class LinkRepositoryImpl @Inject constructor(private val context: Context) : Lin
         context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
-    override fun getLink(): Flow<Optional<HttpUrl>> {
+    override fun getLink(): Flow<HttpUrl?> {
         return flow {
-            emit(Optional.ofNullable(getCurrentLink()))
+            emit(getCurrentLink())
         }
     }
 

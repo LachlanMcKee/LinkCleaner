@@ -31,11 +31,11 @@ class HomeFragment : AbstractBindingFragment<HomeBinding>() {
     override fun onResume() {
         super.onResume()
 
-        model.httpUrl.observe(this, Observer { httpUrl: Optional<HttpUrl> ->
+        model.httpUrl.observe(this, Observer { httpUrl: HttpUrl? ->
             binding.homeLaunch.apply {
-                isVisible = httpUrl.isPresent
+                isVisible = httpUrl != null
                 setOnClickListener {
-                    if (httpUrl.isPresent) {
+                    if (httpUrl != null) {
                         model.updateLink()
                         launchChrome()
                     }

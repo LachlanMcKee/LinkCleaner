@@ -33,8 +33,6 @@ ext {
             daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}",
             daggerCompiler        : "com.google.dagger:dagger-compiler:${versions.dagger}",
 
-            desugarJdk            : "com.android.tools:desugar_jdk_libs:1.0.5",
-
             okHttp                : "com.squareup.okhttp3:okhttp:${versions.okHttp}"
     ]
 
