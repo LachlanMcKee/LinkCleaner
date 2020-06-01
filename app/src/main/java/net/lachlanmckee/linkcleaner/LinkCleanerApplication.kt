@@ -3,6 +3,7 @@ package net.lachlanmckee.linkcleaner
 import android.app.Application
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import net.lachlanmckee.linkcleaner.di.AndroidModule
 import net.lachlanmckee.linkcleaner.di.DaggerAppComponent
 import javax.inject.Inject
 
@@ -12,7 +13,10 @@ class LinkCleanerApplication : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
-        DaggerAppComponent.create()
+        DaggerAppComponent
+            .builder()
+            .androidModule(AndroidModule(this))
+            .build()
             .inject(this)
     }
 

@@ -36,6 +36,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -70,12 +71,15 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring libs.desugarJdk
+
     implementation(libs.kotlin)
     implementation(libs.appcompat)
     implementation(libs.coreKtx)
     implementation(libs.constraintLayout)
     implementation(libs.lifecycleExtensions)
     implementation(libs.lifecycleViewModelKtx)
+    implementation(libs.lifecycleLiveDataKtx)
 
     implementation(libs.navigationFragmentKtx)
     implementation(libs.navigationUiKtx)
@@ -87,6 +91,8 @@ dependencies {
     kapt(libs.daggerAndroidProcessor)
     implementation(libs.dagger)
     implementation(libs.daggerAndroid)
+
+    implementation libs.coroutinesCore
 
     testImplementation(testLibs.junit)
 

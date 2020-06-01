@@ -1,4 +1,4 @@
-package net.lachlanmckee.linkcleaner.feature.settings
+package net.lachlanmckee.linkcleaner.feature.settings.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

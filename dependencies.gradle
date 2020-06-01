@@ -15,12 +15,14 @@ ext {
 
     libs = [
             kotlin                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+            coroutinesCore        : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7",
+
             appcompat             : "androidx.appcompat:appcompat:1.1.0",
             coreKtx               : "androidx.core:core-ktx:1.2.0",
             constraintLayout      : "androidx.constraintlayout:constraintlayout:1.1.3",
             lifecycleExtensions   : "androidx.lifecycle:lifecycle-extensions:${versions.androidLifecycle}",
             lifecycleViewModelKtx : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.androidLifecycle}",
-
+            lifecycleLiveDataKtx  : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.androidLifecycle}",
             navigationFragmentKtx : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
             navigationUiKtx       : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
 
@@ -30,6 +32,8 @@ ext {
             daggerAndroid         : "com.google.dagger:dagger-android-support:${versions.dagger}",
             daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}",
             daggerCompiler        : "com.google.dagger:dagger-compiler:${versions.dagger}",
+
+            desugarJdk            : "com.android.tools:desugar_jdk_libs:1.0.5",
 
             okHttp                : "com.squareup.okhttp3:okhttp:${versions.okHttp}"
     ]
