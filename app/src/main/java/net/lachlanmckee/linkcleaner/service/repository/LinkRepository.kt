@@ -3,8 +3,10 @@ package net.lachlanmckee.linkcleaner.service.repository
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import javax.inject.Inject
@@ -20,13 +22,20 @@ class LinkRepositoryImpl @Inject constructor(private val context: Context) : Lin
         context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
+    @ExperimentalCoroutinesApi
     override fun getLink(): Flow<HttpUrl?> {
-        return flow {
-            emit(getCurrentLink())
+        return callbackFlow {
+            offer(getClipboardLink())
+
+            val clipboardListener: () -> Unit = {
+                offer(getClipboardLink())
+            }
+            clipboardManager.addPrimaryClipChangedListener(clipboardListener)
+            awaitClose { clipboardManager.removePrimaryClipChangedListener(clipboardListener) }
         }
     }
 
-    private fun getCurrentLink(): HttpUrl? {
+    private fun getClipboardLink(): HttpUrl? {
         return clipboardManager
             .primaryClip
             ?.getItemAt(0)
