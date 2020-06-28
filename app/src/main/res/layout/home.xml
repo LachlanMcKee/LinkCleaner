@@ -7,9 +7,16 @@
     tools:context=".feature.home.view.HomeFragment">
 
     <TextView
+        android:id="@+id/home_original_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/home" />
+        tools:text="Original URL" />
+
+    <TextView
+        android:id="@+id/home_replacement_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Original URL" />
 
     <Button
         android:id="@+id/home_launch"

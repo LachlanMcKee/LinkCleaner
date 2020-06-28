@@ -7,13 +7,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import net.lachlanmckee.linkcleaner.service.model.LinkData
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import javax.inject.Inject
 
 interface LinkRepository {
-    fun getLink(): Flow<HttpUrl?>
-    fun updateLink(httpUrl: HttpUrl)
+    fun getLink(): Flow<LinkData?>
+    fun updateLink(linkData: LinkData)
 }
 
 class LinkRepositoryImpl @Inject constructor(private val context: Context) : LinkRepository {
@@ -23,38 +24,43 @@ class LinkRepositoryImpl @Inject constructor(private val context: Context) : Lin
     }
 
     @ExperimentalCoroutinesApi
-    override fun getLink(): Flow<HttpUrl?> {
+    override fun getLink(): Flow<LinkData?> {
         return callbackFlow {
-            offer(getClipboardLink())
+            offer(getClipboardLinkData())
 
             val clipboardListener: () -> Unit = {
-                offer(getClipboardLink())
+                offer(getClipboardLinkData())
             }
             clipboardManager.addPrimaryClipChangedListener(clipboardListener)
             awaitClose { clipboardManager.removePrimaryClipChangedListener(clipboardListener) }
         }
     }
 
-    private fun getClipboardLink(): HttpUrl? {
-        return clipboardManager
+    private fun getClipboardLinkData(): LinkData? {
+        val originalHttpUrl = clipboardManager
             .primaryClip
             ?.getItemAt(0)
             ?.text
             ?.toString()
             ?.toHttpUrlOrNull()
+
+        return originalHttpUrl?.let { httpUrl ->
+            val replacementHttpUrl = HttpUrl.Builder()
+                .scheme(httpUrl.scheme)
+                .host(httpUrl.host)
+                .port(httpUrl.port)
+                .encodedPath(httpUrl.encodedPath)
+                .build()
+
+            LinkData(httpUrl, replacementHttpUrl)
+        }
     }
 
-    override fun updateLink(httpUrl: HttpUrl) {
+    override fun updateLink(linkData: LinkData) {
         clipboardManager.setPrimaryClip(
             ClipData.newPlainText(
                 "Cleaned Link",
-                HttpUrl.Builder()
-                    .scheme(httpUrl.scheme)
-                    .host(httpUrl.host)
-                    .port(httpUrl.port)
-                    .encodedPath(httpUrl.encodedPath)
-                    .build()
-                    .toString()
+                linkData.replacementHttpUrl.toString()
             )
         )
     }

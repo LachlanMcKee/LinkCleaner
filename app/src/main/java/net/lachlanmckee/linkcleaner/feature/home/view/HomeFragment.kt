@@ -14,6 +14,7 @@ import net.lachlanmckee.linkcleaner.AbstractBindingFragment
 import net.lachlanmckee.linkcleaner.databinding.HomeBinding
 import net.lachlanmckee.linkcleaner.di.viewmodel.ViewModelProviderFactory
 import net.lachlanmckee.linkcleaner.feature.home.viewmodel.HomeViewModel
+import net.lachlanmckee.linkcleaner.feature.home.viewmodel.State
 import okhttp3.HttpUrl
 import java.util.*
 import javax.inject.Inject
@@ -31,14 +32,23 @@ class HomeFragment : AbstractBindingFragment<HomeBinding>() {
     override fun onResume() {
         super.onResume()
 
-        model.httpUrl.observe(this, Observer { httpUrl: HttpUrl? ->
-            binding.homeLaunch.apply {
-                isVisible = httpUrl != null
-                setOnClickListener {
-                    if (httpUrl != null) {
-                        model.updateLink()
-                        launchChrome()
+        model.state.observe(this, Observer { state: State ->
+            when (state) {
+                State.Empty -> {
+                    binding.homeLaunch.isVisible = false
+                    binding.homeOriginalUrl.isVisible = false
+                    binding.homeReplacementUrl.isVisible = false
+                }
+                is State.LinkFound -> {
+                    binding.homeLaunch.apply {
+                        isVisible = true
+                        setOnClickListener {
+                            model.updateLink()
+                            launchChrome()
+                        }
                     }
+                    binding.homeOriginalUrl.text = state.originalUrl
+                    binding.homeReplacementUrl.text = state.replacementUrl
                 }
             }
         })
