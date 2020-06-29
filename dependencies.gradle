@@ -41,8 +41,13 @@ ext {
     ]
 
     espressoLibs = [
-            junit       : "androidx.test.ext:junit:1.1.1",
-            espressoCore: "androidx.test.espresso:espresso-core:${versions.espresso}",
-            navigation  : "androidx.navigation:navigation-testing:${versions.navigation}"
+            junit          : "androidx.test.ext:junit:1.1.1",
+            espressoCore   : "androidx.test.espresso:espresso-core:${versions.espresso}",
+            espressoIntents: "androidx.test.espresso:espresso-intents:${versions.espresso}",
+            fragmentTesting: 'androidx.fragment:fragment-testing:1.2.5',
+            runner         : "androidx.test:runner:1.2.0",
+            rules          : "androidx.test:rules:1.2.0",
+            navigation     : "androidx.navigation:navigation-testing:${versions.navigation}",
+            orchestrator   : 'androidx.test:orchestrator:1.2.0'
     ]
 }

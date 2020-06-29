@@ -33,6 +33,12 @@ android {
         versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        testOptions {
+            execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        }
+
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     compileOptions {
@@ -93,7 +99,12 @@ dependencies {
 
     testImplementation(testLibs.junit)
 
+    debugImplementation(espressoLibs.fragmentTesting)
     androidTestImplementation(espressoLibs.junit)
     androidTestImplementation(espressoLibs.espressoCore)
+    androidTestImplementation(espressoLibs.espressoIntents)
+    androidTestImplementation(espressoLibs.runner)
+    androidTestImplementation(espressoLibs.rules)
     androidTestImplementation(espressoLibs.navigation)
+    androidTestUtil(espressoLibs.orchestrator)
 }

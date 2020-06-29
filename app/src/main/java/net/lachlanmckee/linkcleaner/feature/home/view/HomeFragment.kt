@@ -47,6 +47,8 @@ class HomeFragment : AbstractBindingFragment<HomeBinding>() {
                             launchChrome()
                         }
                     }
+                    binding.homeOriginalUrl.isVisible = true
+                    binding.homeReplacementUrl.isVisible = true
                     binding.homeOriginalUrl.text = state.originalUrl
                     binding.homeReplacementUrl.text = state.replacementUrl
                 }
