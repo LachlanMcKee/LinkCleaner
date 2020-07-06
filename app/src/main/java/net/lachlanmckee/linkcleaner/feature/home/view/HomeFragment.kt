@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,8 +16,7 @@ import net.lachlanmckee.linkcleaner.databinding.HomeBinding
 import net.lachlanmckee.linkcleaner.di.viewmodel.ViewModelProviderFactory
 import net.lachlanmckee.linkcleaner.feature.home.viewmodel.HomeViewModel
 import net.lachlanmckee.linkcleaner.feature.home.viewmodel.State
-import okhttp3.HttpUrl
-import java.util.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class HomeFragment : AbstractBindingFragment<HomeBinding>() {
@@ -27,12 +27,33 @@ class HomeFragment : AbstractBindingFragment<HomeBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
+
+        val hasWindowFocus = view.hasWindowFocus()
+        Timber.d("onViewCreated. hasWindowFocus: $hasWindowFocus")
+        if (hasWindowFocus) {
+            listenToState()
+        } else {
+            view.viewTreeObserver.addOnWindowFocusChangeListener(object :
+                ViewTreeObserver.OnWindowFocusChangeListener {
+                override fun onWindowFocusChanged(hasFocus: Boolean) {
+                    if (hasFocus) {
+                        listenToState()
+                        view.viewTreeObserver.removeOnWindowFocusChangeListener(this)
+                    }
+                }
+            })
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onDestroyView() {
+        Timber.d("onDestroyView")
+        super.onDestroyView()
+    }
 
-        model.state.observe(this, Observer { state: State ->
+    private fun listenToState() {
+        Timber.d("listenToState. observe")
+        model.state.observe(viewLifecycleOwner, Observer { state: State ->
+            Timber.d("listenToState. State: $state")
             when (state) {
                 State.Empty -> {
                     binding.homeLaunch.isVisible = false

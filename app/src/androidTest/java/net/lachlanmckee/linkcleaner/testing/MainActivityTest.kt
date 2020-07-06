@@ -4,6 +4,7 @@ import android.app.Instrumentation
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.SystemClock
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -55,6 +56,10 @@ class MainActivityTest {
         checkViewWithTextIsNotVisible("Copy link and launch Chrome")
 
         setClipboardData("Cleaned Link", "http://www.example.com?key1=value1&key2=value2")
+
+        // Give the system a moment to listen to the clipboard
+        SystemClock.sleep(300)
+
         assertLaunchChrome()
     }
 

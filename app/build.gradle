@@ -97,6 +97,8 @@ dependencies {
 
     implementation libs.coroutinesCore
 
+    implementation libs.timber
+
     testImplementation(testLibs.junit)
 
     debugImplementation(espressoLibs.fragmentTesting)

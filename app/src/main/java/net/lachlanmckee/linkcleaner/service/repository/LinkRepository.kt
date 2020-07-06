@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import net.lachlanmckee.linkcleaner.service.model.LinkData
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import timber.log.Timber
 import javax.inject.Inject
 
 interface LinkRepository {
@@ -26,10 +27,14 @@ class LinkRepositoryImpl @Inject constructor(private val context: Context) : Lin
     @ExperimentalCoroutinesApi
     override fun getLink(): Flow<LinkData?> {
         return callbackFlow {
-            offer(getClipboardLinkData())
+            val initialLinkData = getClipboardLinkData()
+            offer(initialLinkData)
+            Timber.d("getLink. initialLinkData: $initialLinkData")
 
             val clipboardListener: () -> Unit = {
-                offer(getClipboardLinkData())
+                val newLinkData = getClipboardLinkData()
+                Timber.d("getLink. newLinkData: $newLinkData")
+                offer(newLinkData)
             }
             clipboardManager.addPrimaryClipChangedListener(clipboardListener)
             awaitClose { clipboardManager.removePrimaryClipChangedListener(clipboardListener) }

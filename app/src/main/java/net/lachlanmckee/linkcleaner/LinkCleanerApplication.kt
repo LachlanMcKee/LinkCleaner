@@ -5,6 +5,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import net.lachlanmckee.linkcleaner.di.AndroidModule
 import net.lachlanmckee.linkcleaner.di.DaggerAppComponent
+import timber.log.Timber
 import javax.inject.Inject
 
 class LinkCleanerApplication : Application(), HasAndroidInjector {
@@ -18,6 +19,8 @@ class LinkCleanerApplication : Application(), HasAndroidInjector {
             .androidModule(AndroidModule(this))
             .build()
             .inject(this)
+
+        Timber.plant(Timber.DebugTree())
     }
 
     override fun androidInjector() = dispatchingAndroidInjector

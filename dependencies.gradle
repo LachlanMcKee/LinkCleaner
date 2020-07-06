@@ -33,7 +33,9 @@ ext {
             daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:${versions.dagger}",
             daggerCompiler        : "com.google.dagger:dagger-compiler:${versions.dagger}",
 
-            okHttp                : "com.squareup.okhttp3:okhttp:${versions.okHttp}"
+            okHttp                : "com.squareup.okhttp3:okhttp:${versions.okHttp}",
+
+            timber                : "com.jakewharton.timber:timber:4.7.1"
     ]
 
     testLibs = [

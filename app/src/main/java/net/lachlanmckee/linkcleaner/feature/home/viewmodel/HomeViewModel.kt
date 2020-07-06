@@ -3,7 +3,6 @@ package net.lachlanmckee.linkcleaner.feature.home.viewmodel
 import androidx.lifecycle.*
 import net.lachlanmckee.linkcleaner.service.model.LinkData
 import net.lachlanmckee.linkcleaner.service.repository.LinkRepository
-import okhttp3.HttpUrl
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
