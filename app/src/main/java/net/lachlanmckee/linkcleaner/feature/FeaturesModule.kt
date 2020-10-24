@@ -5,9 +5,9 @@ import net.lachlanmckee.linkcleaner.feature.home.HomeModule
 import net.lachlanmckee.linkcleaner.feature.settings.SettingsModule
 
 @Module(
-    includes = [
-        HomeModule::class,
-        SettingsModule::class
-    ]
+  includes = [
+    HomeModule::class,
+    SettingsModule::class
+  ]
 )
 interface FeaturesModule

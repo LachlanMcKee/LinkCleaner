@@ -1,9 +1,9 @@
 pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
+  repositories {
+    mavenCentral()
+    gradlePluginPortal()
+  }
 }
 
-rootProject.name="Link Cleaner"
+rootProject.name = "Link Cleaner"
 include(":app")

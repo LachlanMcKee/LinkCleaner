@@ -6,7 +6,7 @@ import javax.inject.Singleton
 
 @Module
 interface RepositoryModule {
-    @Singleton
-    @Binds
-    fun bindLinkRepository(impl: LinkRepositoryImpl): LinkRepository
+  @Singleton
+  @Binds
+  fun bindLinkRepository(impl: LinkRepositoryImpl): LinkRepository
 }

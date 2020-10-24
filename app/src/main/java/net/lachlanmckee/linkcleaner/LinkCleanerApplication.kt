@@ -9,19 +9,19 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LinkCleanerApplication : Application(), HasAndroidInjector {
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
+  @Inject
+  lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
-    override fun onCreate() {
-        super.onCreate()
-        DaggerAppComponent
-            .builder()
-            .androidModule(AndroidModule(this))
-            .build()
-            .inject(this)
+  override fun onCreate() {
+    super.onCreate()
+    DaggerAppComponent
+      .builder()
+      .androidModule(AndroidModule(this))
+      .build()
+      .inject(this)
 
-        Timber.plant(Timber.DebugTree())
-    }
+    Timber.plant(Timber.DebugTree())
+  }
 
-    override fun androidInjector() = dispatchingAndroidInjector
+  override fun androidInjector() = dispatchingAndroidInjector
 }

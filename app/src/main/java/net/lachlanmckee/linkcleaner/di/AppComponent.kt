@@ -11,13 +11,13 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [
-        AndroidSupportInjectionModule::class,
-        AndroidModule::class,
-        RepositoryModule::class,
-        FeaturesModule::class
-    ]
+  modules = [
+    AndroidSupportInjectionModule::class,
+    AndroidModule::class,
+    RepositoryModule::class,
+    FeaturesModule::class
+  ]
 )
 interface AppComponent : AndroidInjector<DaggerApplication> {
-    fun inject(linkCleanerApplication: LinkCleanerApplication)
+  fun inject(linkCleanerApplication: LinkCleanerApplication)
 }

@@ -7,24 +7,24 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 class DetectableIntentMatcher(
-    private val wrappedMatcher: Matcher<Intent>
+  private val wrappedMatcher: Matcher<Intent>
 ) : TypeSafeMatcher<Intent>() {
 
-    private var wasTriggered: Boolean = false
+  private var wasTriggered: Boolean = false
 
-    fun assertIntentTriggered() {
-        assertTrue("Expected Intent was not triggered", wasTriggered)
-    }
+  fun assertIntentTriggered() {
+    assertTrue("Expected Intent was not triggered", wasTriggered)
+  }
 
-    override fun describeTo(description: Description) {
-        description.appendText("DetectableIntentMatcher [${wrappedMatcher.describeTo(description)}]")
-    }
+  override fun describeTo(description: Description) {
+    description.appendText("DetectableIntentMatcher [${wrappedMatcher.describeTo(description)}]")
+  }
 
-    public override fun matchesSafely(intent: Intent): Boolean {
-        val matches = wrappedMatcher.matches(intent)
-        if (matches) {
-            wasTriggered = true
-        }
-        return matches
+  public override fun matchesSafely(intent: Intent): Boolean {
+    val matches = wrappedMatcher.matches(intent)
+    if (matches) {
+      wasTriggered = true
     }
+    return matches
+  }
 }

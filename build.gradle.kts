@@ -1,42 +1,74 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10")
+  repositories {
+    google()
+    jcenter()
+  }
+  dependencies {
+    classpath("com.android.tools.build:gradle:4.1.0")
+    classpath(kotlin("gradle-plugin", version = Dependencies.Kotlin.version))
 
-        classpath("com.google.gms:google-services:4.3.4")
-        classpath("com.google.firebase:firebase-appdistribution-gradle:2.0.1")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Dependencies.AndroidX.navigationVersion}")
-    }
+    classpath("com.google.gms:google-services:4.3.4")
+    classpath("com.google.firebase:firebase-appdistribution-gradle:2.0.1")
+    classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Dependencies.AndroidX.navigationVersion}")
+  }
+}
+
+plugins {
+  id("com.diffplug.spotless") version "5.6.1"
+}
+
+spotless {
+  format("misc") {
+    target("*.md", ".gitignore")
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+  kotlin {
+    ktlint(Dependencies.ktlintVersion).userData(
+      mapOf(
+        "indent_size" to "2",
+        "disabled_rules" to "no-wildcard-imports"
+      )
+    )
+    target("**/*.kt")
+    trimTrailingWhitespace()
+    endWithNewline()
+    targetExclude("**/build/**")
+  }
+  kotlinGradle {
+    ktlint(Dependencies.ktlintVersion).userData(mapOf("indent_size" to "2"))
+    target("**/*.gradle.kts")
+    trimTrailingWhitespace()
+    endWithNewline()
+    targetExclude("**/build/**")
+  }
 }
 
 allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
+  repositories {
+    google()
+    jcenter()
+  }
 }
 
 subprojects {
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 
-    pluginManager.withPlugin("java") {
-        configure<JavaPluginExtension> {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
+  pluginManager.withPlugin("java") {
+    configure<JavaPluginExtension> {
+      sourceCompatibility = JavaVersion.VERSION_1_8
+      targetCompatibility = JavaVersion.VERSION_1_8
     }
+  }
 
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
+  tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+      jvmTarget = "1.8"
     }
+  }
 }

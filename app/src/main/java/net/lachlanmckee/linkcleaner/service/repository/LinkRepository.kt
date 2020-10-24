@@ -14,59 +14,59 @@ import timber.log.Timber
 import javax.inject.Inject
 
 interface LinkRepository {
-    fun getLink(): Flow<LinkData?>
-    fun updateLink(linkData: LinkData)
+  fun getLink(): Flow<LinkData?>
+  fun updateLink(linkData: LinkData)
 }
 
 class LinkRepositoryImpl @Inject constructor(private val context: Context) : LinkRepository {
 
-    private val clipboardManager: ClipboardManager by lazy {
-        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+  private val clipboardManager: ClipboardManager by lazy {
+    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+  }
+
+  @ExperimentalCoroutinesApi
+  override fun getLink(): Flow<LinkData?> {
+    return callbackFlow {
+      val initialLinkData = getClipboardLinkData()
+      offer(initialLinkData)
+      Timber.d("getLink. initialLinkData: $initialLinkData")
+
+      val clipboardListener: () -> Unit = {
+        val newLinkData = getClipboardLinkData()
+        Timber.d("getLink. newLinkData: $newLinkData")
+        offer(newLinkData)
+      }
+      clipboardManager.addPrimaryClipChangedListener(clipboardListener)
+      awaitClose { clipboardManager.removePrimaryClipChangedListener(clipboardListener) }
     }
+  }
 
-    @ExperimentalCoroutinesApi
-    override fun getLink(): Flow<LinkData?> {
-        return callbackFlow {
-            val initialLinkData = getClipboardLinkData()
-            offer(initialLinkData)
-            Timber.d("getLink. initialLinkData: $initialLinkData")
+  private fun getClipboardLinkData(): LinkData? {
+    val originalHttpUrl = clipboardManager
+      .primaryClip
+      ?.getItemAt(0)
+      ?.text
+      ?.toString()
+      ?.toHttpUrlOrNull()
 
-            val clipboardListener: () -> Unit = {
-                val newLinkData = getClipboardLinkData()
-                Timber.d("getLink. newLinkData: $newLinkData")
-                offer(newLinkData)
-            }
-            clipboardManager.addPrimaryClipChangedListener(clipboardListener)
-            awaitClose { clipboardManager.removePrimaryClipChangedListener(clipboardListener) }
-        }
+    return originalHttpUrl?.let { httpUrl ->
+      val replacementHttpUrl = HttpUrl.Builder()
+        .scheme(httpUrl.scheme)
+        .host(httpUrl.host)
+        .port(httpUrl.port)
+        .encodedPath(httpUrl.encodedPath)
+        .build()
+
+      LinkData(httpUrl, replacementHttpUrl)
     }
+  }
 
-    private fun getClipboardLinkData(): LinkData? {
-        val originalHttpUrl = clipboardManager
-            .primaryClip
-            ?.getItemAt(0)
-            ?.text
-            ?.toString()
-            ?.toHttpUrlOrNull()
-
-        return originalHttpUrl?.let { httpUrl ->
-            val replacementHttpUrl = HttpUrl.Builder()
-                .scheme(httpUrl.scheme)
-                .host(httpUrl.host)
-                .port(httpUrl.port)
-                .encodedPath(httpUrl.encodedPath)
-                .build()
-
-            LinkData(httpUrl, replacementHttpUrl)
-        }
-    }
-
-    override fun updateLink(linkData: LinkData) {
-        clipboardManager.setPrimaryClip(
-            ClipData.newPlainText(
-                "Cleaned Link",
-                linkData.replacementHttpUrl.toString()
-            )
-        )
-    }
+  override fun updateLink(linkData: LinkData) {
+    clipboardManager.setPrimaryClip(
+      ClipData.newPlainText(
+        "Cleaned Link",
+        linkData.replacementHttpUrl.toString()
+      )
+    )
+  }
 }

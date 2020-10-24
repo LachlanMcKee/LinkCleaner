@@ -13,13 +13,13 @@ import javax.inject.Singleton
 
 @Module
 interface HomeModule {
-    @FeatureScope
-    @ContributesAndroidInjector
-    fun fragment(): HomeFragment
+  @FeatureScope
+  @ContributesAndroidInjector
+  fun fragment(): HomeFragment
 
-    @Singleton
-    @Binds
-    @IntoMap
-    @ViewModelKey(HomeViewModel::class)
-    fun bindHomeViewModel(viewModel: HomeViewModel): ViewModel
+  @Singleton
+  @Binds
+  @IntoMap
+  @ViewModelKey(HomeViewModel::class)
+  fun bindHomeViewModel(viewModel: HomeViewModel): ViewModel
 }

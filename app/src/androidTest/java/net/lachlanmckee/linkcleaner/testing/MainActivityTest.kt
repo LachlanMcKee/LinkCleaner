@@ -24,80 +24,80 @@ import org.junit.Test
 
 class MainActivityTest {
 
-    @Before
-    fun setup() {
-        Intents.init()
+  @Before
+  fun setup() {
+    Intents.init()
 
-        // Prepare the clipboard manager for testing (without this, there is an issue with handlers)
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            getClipboardManager()
-        }
-
-        setClipboardData("", "")
+    // Prepare the clipboard manager for testing (without this, there is an issue with handlers)
+    InstrumentationRegistry.getInstrumentation().runOnMainSync {
+      getClipboardManager()
     }
 
-    @After
-    fun tearDown() {
-        Intents.release()
-    }
+    setClipboardData("", "")
+  }
 
-    @Test
-    fun givenValidLinkCopiedBeforeLaunch_whenLaunch_thenExpectCopyLink() {
-        setClipboardData("Cleaned Link", "http://www.example.com?key1=value1&key2=value2")
+  @After
+  fun tearDown() {
+    Intents.release()
+  }
 
-        launchFragmentInContainer<HomeFragment>()
-        assertLaunchChrome()
-    }
+  @Test
+  fun givenValidLinkCopiedBeforeLaunch_whenLaunch_thenExpectCopyLink() {
+    setClipboardData("Cleaned Link", "http://www.example.com?key1=value1&key2=value2")
 
-    @Test
-    fun givenLaunch_whenValidLinkCopied_thenExpectCopyLink() {
-        launchFragmentInContainer<HomeFragment>()
+    launchFragmentInContainer<HomeFragment>()
+    assertLaunchChrome()
+  }
 
-        checkViewWithTextIsNotVisible("Copy link and launch Chrome")
+  @Test
+  fun givenLaunch_whenValidLinkCopied_thenExpectCopyLink() {
+    launchFragmentInContainer<HomeFragment>()
 
-        setClipboardData("Cleaned Link", "http://www.example.com?key1=value1&key2=value2")
+    checkViewWithTextIsNotVisible("Copy link and launch Chrome")
 
-        // Give the system a moment to listen to the clipboard
-        SystemClock.sleep(300)
+    setClipboardData("Cleaned Link", "http://www.example.com?key1=value1&key2=value2")
 
-        assertLaunchChrome()
-    }
+    // Give the system a moment to listen to the clipboard
+    SystemClock.sleep(300)
 
-    @Test
-    fun givenLaunch_whenNoLinksCopied_thenExpectNoCopyLinkButton() {
-        launchFragmentInContainer<HomeFragment>()
+    assertLaunchChrome()
+  }
 
-        checkViewWithTextIsNotVisible("Copy link and launch Chrome")
-    }
+  @Test
+  fun givenLaunch_whenNoLinksCopied_thenExpectNoCopyLinkButton() {
+    launchFragmentInContainer<HomeFragment>()
 
-    private fun assertLaunchChrome() {
-        checkViewWithTextIsVisible("http://www.example.com/?key1=value1&key2=value2")
-        checkViewWithTextIsVisible("http://www.example.com/")
-        checkViewWithTextIsVisible("Copy link and launch Chrome")
+    checkViewWithTextIsNotVisible("Copy link and launch Chrome")
+  }
 
-        val detectableIntentMatcher = DetectableIntentMatcher(toPackage("com.android.chrome"))
-        intending(detectableIntentMatcher)
-            .respondWith(Instrumentation.ActivityResult(0, null))
+  private fun assertLaunchChrome() {
+    checkViewWithTextIsVisible("http://www.example.com/?key1=value1&key2=value2")
+    checkViewWithTextIsVisible("http://www.example.com/")
+    checkViewWithTextIsVisible("Copy link and launch Chrome")
 
-        onView(withText("Copy link and launch Chrome")).perform(click())
+    val detectableIntentMatcher = DetectableIntentMatcher(toPackage("com.android.chrome"))
+    intending(detectableIntentMatcher)
+      .respondWith(Instrumentation.ActivityResult(0, null))
 
-        assertEquals("http://www.example.com/", getClipboardText())
+    onView(withText("Copy link and launch Chrome")).perform(click())
 
-        detectableIntentMatcher.assertIntentTriggered()
-    }
+    assertEquals("http://www.example.com/", getClipboardText())
 
-    private fun setClipboardData(label: String, text: String) {
-        getClipboardManager().setPrimaryClip(ClipData.newPlainText(label, text))
-    }
+    detectableIntentMatcher.assertIntentTriggered()
+  }
 
-    private fun getClipboardText(): String {
-        return getClipboardManager().primaryClip!!.getItemAt(0)!!.text.toString()
-    }
+  private fun setClipboardData(label: String, text: String) {
+    getClipboardManager().setPrimaryClip(ClipData.newPlainText(label, text))
+  }
 
-    private fun getClipboardManager(): ClipboardManager {
-        return InstrumentationRegistry
-            .getInstrumentation()
-            .targetContext
-            .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    }
+  private fun getClipboardText(): String {
+    return getClipboardManager().primaryClip!!.getItemAt(0)!!.text.toString()
+  }
+
+  private fun getClipboardManager(): ClipboardManager {
+    return InstrumentationRegistry
+      .getInstrumentation()
+      .targetContext
+      .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+  }
 }

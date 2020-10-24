@@ -6,6 +6,6 @@ import net.lachlanmckee.linkcleaner.feature.settings.view.SettingsFragment
 
 @Module
 interface SettingsModule {
-    @ContributesAndroidInjector
-    fun fragment(): SettingsFragment
+  @ContributesAndroidInjector
+  fun fragment(): SettingsFragment
 }

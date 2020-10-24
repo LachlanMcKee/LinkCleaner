@@ -8,15 +8,15 @@ import javax.inject.Singleton
 
 @Module
 class AndroidModule(private val application: Application) {
-    @Singleton
-    @Provides
-    fun bindApplication(): Application {
-        return application
-    }
+  @Singleton
+  @Provides
+  fun bindApplication(): Application {
+    return application
+  }
 
-    @Singleton
-    @Provides
-    fun bindContext(): Context {
-        return application
-    }
+  @Singleton
+  @Provides
+  fun bindContext(): Context {
+    return application
+  }
 }
