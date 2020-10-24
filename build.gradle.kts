@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -16,7 +17,8 @@ buildscript {
 }
 
 plugins {
-  id("com.diffplug.spotless") version "5.6.1"
+  id("com.diffplug.spotless") version "5.7.0"
+  id("com.github.ben-manes.versions") version "0.33.0"
 }
 
 spotless {
@@ -44,6 +46,15 @@ spotless {
     trimTrailingWhitespace()
     endWithNewline()
     targetExclude("**/build/**")
+  }
+}
+
+tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
+  rejectVersionIf {
+    candidate.version.contains("alpha") ||
+      candidate.version.contains("beta") ||
+      candidate.version.contains("RC") ||
+      candidate.version.contains("M[0-9]+?$".toRegex())
   }
 }
 
