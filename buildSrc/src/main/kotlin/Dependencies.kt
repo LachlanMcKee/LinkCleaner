@@ -16,6 +16,16 @@ object Dependencies {
     const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigationVersion"
   }
+  object Compose {
+    const val version = "1.0.0-alpha05"
+    const val ui = "androidx.compose.ui:ui:$version"
+    const val uiTooling = "androidx.ui:ui-tooling:$version"
+    const val foundation = "androidx.compose.foundation:foundation:$version"
+    const val material = "androidx.compose.material:material:$version"
+    const val iconsCore = "androidx.compose.material:material-icons-core:$version"
+    const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
+    const val liveData = "androidx.compose.runtime:runtime-livedata:$version"
+  }
   object Di {
     const val version = "2.29.1"
     const val dagger = "com.google.dagger:dagger:$version"

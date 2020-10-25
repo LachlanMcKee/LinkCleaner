@@ -6,18 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import net.lachlanmckee.linkcleaner.databinding.MainActivityBinding
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-  private lateinit var binding: MainActivityBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    binding = MainActivityBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+    setContentView(R.layout.main_activity)
 
     val host: NavHostFragment = supportFragmentManager
       .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -28,12 +26,12 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun setupBottomNavMenu(navController: NavController) {
-    binding.bottomNavigation.setupWithNavController(navController)
+    findViewById<BottomNavigationView>(R.id.bottom_navigation).setupWithNavController(navController)
   }
 
   private fun setupNavigationVisibilityToggle(navController: NavController) {
     navController.addOnDestinationChangedListener { _, destination, _ ->
-      binding.bottomNavigation.visibility = when (destination.id) {
+      findViewById<BottomNavigationView>(R.id.bottom_navigation).visibility = when (destination.id) {
         R.id.home_dest,
         R.id.settings_dest -> View.VISIBLE
         else -> View.GONE
