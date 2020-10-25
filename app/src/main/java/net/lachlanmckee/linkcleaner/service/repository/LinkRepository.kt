@@ -3,6 +3,7 @@ package net.lachlanmckee.linkcleaner.service.repository
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +19,7 @@ interface LinkRepository {
   fun updateLink(linkData: LinkData)
 }
 
-class LinkRepositoryImpl @Inject constructor(private val context: Context) : LinkRepository {
+class LinkRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) : LinkRepository {
 
   private val clipboardManager: ClipboardManager by lazy {
     context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

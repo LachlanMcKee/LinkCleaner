@@ -10,6 +10,7 @@ plugins {
   kotlin("android")
   kotlin("kapt")
   id("com.google.gms.google-services")
+  id("dagger.hilt.android.plugin")
   id("com.google.firebase.appdistribution")
   id("androidx.navigation.safeargs.kotlin")
 }
@@ -63,6 +64,10 @@ android {
   }
 }
 
+kapt {
+  correctErrorTypes = true
+}
+
 dependencies {
   implementation(Dependencies.Kotlin.stdlib)
 
@@ -78,10 +83,10 @@ dependencies {
   implementation(Dependencies.Network.okHttp)
   implementation(Dependencies.Analytics.firebaseAnalytics)
 
-  kapt(Dependencies.Di.daggerCompiler)
-  kapt(Dependencies.Di.daggerAndroidProcessor)
   implementation(Dependencies.Di.dagger)
-  implementation(Dependencies.Di.daggerAndroid)
+  implementation(Dependencies.Di.daggerHilt)
+  kapt(Dependencies.Di.daggerCompiler)
+  kapt(Dependencies.Di.daggerHiltCompiler)
 
   implementation(Dependencies.Kotlin.coroutinesCore)
 
@@ -96,5 +101,7 @@ dependencies {
   androidTestImplementation(EspressoTestDependencies.runner)
   androidTestImplementation(EspressoTestDependencies.rules)
   androidTestImplementation(EspressoTestDependencies.navigation)
+  androidTestImplementation(EspressoTestDependencies.daggerHiltAndroidTesting)
+  kaptAndroidTest(Dependencies.Di.daggerHiltCompiler)
   androidTestUtil(EspressoTestDependencies.orchestrator)
 }

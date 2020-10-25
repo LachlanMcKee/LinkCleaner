@@ -17,11 +17,11 @@ object Dependencies {
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigationVersion"
   }
   object Di {
-    private const val version = "2.29.1"
+    const val version = "2.29.1"
     const val dagger = "com.google.dagger:dagger:$version"
+    const val daggerHilt = "com.google.dagger:hilt-android:$version-alpha"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:$version"
-    const val daggerAndroid = "com.google.dagger:dagger-android-support:$version"
-    const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:$version"
+    const val daggerHiltCompiler = "com.google.dagger:hilt-compiler:$version-alpha"
   }
   object Kotlin {
     const val version = "1.4.10"

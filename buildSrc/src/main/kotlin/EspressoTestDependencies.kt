@@ -1,6 +1,7 @@
 object EspressoTestDependencies {
   private const val espressoVersion = "3.3.0"
   const val junit = "androidx.test.ext:junit:1.1.2"
+  const val daggerHiltAndroidTesting = "com.google.dagger:hilt-android-testing:${Dependencies.Di.version}-alpha"
   const val espressoCore = "androidx.test.espresso:espresso-core:$espressoVersion"
   const val espressoIntents = "androidx.test.espresso:espresso-intents:$espressoVersion"
   const val fragmentTesting = "androidx.fragment:fragment-testing:1.3.0-beta01"

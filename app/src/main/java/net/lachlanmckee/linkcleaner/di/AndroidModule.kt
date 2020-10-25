@@ -1,22 +1,9 @@
 package net.lachlanmckee.linkcleaner.di
 
-import android.app.Application
-import android.content.Context
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 
 @Module
-class AndroidModule(private val application: Application) {
-  @Singleton
-  @Provides
-  fun bindApplication(): Application {
-    return application
-  }
-
-  @Singleton
-  @Provides
-  fun bindContext(): Context {
-    return application
-  }
-}
+@InstallIn(ApplicationComponent::class)
+class AndroidModule

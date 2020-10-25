@@ -10,7 +10,7 @@ import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import net.lachlanmckee.linkcleaner.AbstractBindingFragment
 import net.lachlanmckee.linkcleaner.databinding.HomeBinding
 import net.lachlanmckee.linkcleaner.di.viewmodel.ViewModelProviderFactory
@@ -19,6 +19,7 @@ import net.lachlanmckee.linkcleaner.feature.home.viewmodel.State
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : AbstractBindingFragment<HomeBinding>() {
   @Inject
   lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -26,8 +27,6 @@ class HomeFragment : AbstractBindingFragment<HomeBinding>() {
   private val model: HomeViewModel by viewModels { viewModelProviderFactory }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    AndroidSupportInjection.inject(this)
-
     val hasWindowFocus = view.hasWindowFocus()
     Timber.d("onViewCreated. hasWindowFocus: $hasWindowFocus")
     if (hasWindowFocus) {

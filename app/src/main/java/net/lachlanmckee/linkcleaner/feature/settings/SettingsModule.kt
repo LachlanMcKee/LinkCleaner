@@ -1,11 +1,9 @@
 package net.lachlanmckee.linkcleaner.feature.settings
 
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
-import net.lachlanmckee.linkcleaner.feature.settings.view.SettingsFragment
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 
 @Module
-interface SettingsModule {
-  @ContributesAndroidInjector
-  fun fragment(): SettingsFragment
-}
+@InstallIn(ApplicationComponent::class)
+interface SettingsModule

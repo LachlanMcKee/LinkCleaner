@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.SystemClock
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
@@ -13,15 +12,18 @@ import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.TestCase.assertEquals
 import net.lachlanmckee.linkcleaner.feature.home.view.HomeFragment
 import net.lachlanmckee.linkcleaner.testing.matcher.DetectableIntentMatcher
 import net.lachlanmckee.linkcleaner.testing.util.TextEspressoUtil.checkViewWithTextIsNotVisible
 import net.lachlanmckee.linkcleaner.testing.util.TextEspressoUtil.checkViewWithTextIsVisible
+import net.lachlanmckee.linkcleaner.testing.util.launchFragmentInHiltContainer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@HiltAndroidTest
 class MainActivityTest {
 
   @Before
@@ -45,13 +47,13 @@ class MainActivityTest {
   fun givenValidLinkCopiedBeforeLaunch_whenLaunch_thenExpectCopyLink() {
     setClipboardData("Cleaned Link", "http://www.example.com?key1=value1&key2=value2")
 
-    launchFragmentInContainer<HomeFragment>()
+    launchFragmentInHiltContainer<HomeFragment>()
     assertLaunchChrome()
   }
 
   @Test
   fun givenLaunch_whenValidLinkCopied_thenExpectCopyLink() {
-    launchFragmentInContainer<HomeFragment>()
+    launchFragmentInHiltContainer<HomeFragment>()
 
     checkViewWithTextIsNotVisible("Copy link and launch Chrome")
 
@@ -65,7 +67,7 @@ class MainActivityTest {
 
   @Test
   fun givenLaunch_whenNoLinksCopied_thenExpectNoCopyLinkButton() {
-    launchFragmentInContainer<HomeFragment>()
+    launchFragmentInHiltContainer<HomeFragment>()
 
     checkViewWithTextIsNotVisible("Copy link and launch Chrome")
   }
