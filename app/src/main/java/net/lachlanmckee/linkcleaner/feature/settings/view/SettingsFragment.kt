@@ -1,14 +1,25 @@
 package net.lachlanmckee.linkcleaner.feature.settings.view
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Text
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
-import net.lachlanmckee.linkcleaner.AbstractBindingFragment
-import net.lachlanmckee.linkcleaner.databinding.SettingsBinding
 
 @AndroidEntryPoint
-class SettingsFragment : AbstractBindingFragment<SettingsBinding>() {
-  override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): SettingsBinding {
-    return SettingsBinding.inflate(inflater, container, false)
+class SettingsFragment : Fragment() {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    return ComposeView(requireContext()).apply {
+      setContent {
+        Text(text = "Hello world.")
+      }
+    }
   }
 }

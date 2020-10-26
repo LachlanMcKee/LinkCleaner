@@ -5,15 +5,16 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.SystemClock
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.ui.test.createAndroidComposeRule
+import androidx.ui.test.onNodeWithText
+import androidx.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.TestCase.assertEquals
+import net.lachlanmckee.linkcleaner.HiltTestActivity
 import net.lachlanmckee.linkcleaner.feature.home.view.HomeFragment
 import net.lachlanmckee.linkcleaner.testing.matcher.DetectableIntentMatcher
 import net.lachlanmckee.linkcleaner.testing.util.TextEspressoUtil.checkViewWithTextIsNotVisible
@@ -21,10 +22,15 @@ import net.lachlanmckee.linkcleaner.testing.util.TextEspressoUtil.checkViewWithT
 import net.lachlanmckee.linkcleaner.testing.util.launchFragmentInHiltContainer
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
 class MainActivityTest {
+
+  @get:Rule
+  val composeTestRule =
+    createAndroidComposeRule<HiltTestActivity>(disableTransitions = true)
 
   @Before
   fun setup() {
@@ -81,7 +87,7 @@ class MainActivityTest {
     intending(detectableIntentMatcher)
       .respondWith(Instrumentation.ActivityResult(0, null))
 
-    onView(withText("Copy link and launch Chrome")).perform(click())
+    onNodeWithText("Copy link and launch Chrome").performClick()
 
     assertEquals("http://www.example.com/", getClipboardText())
 

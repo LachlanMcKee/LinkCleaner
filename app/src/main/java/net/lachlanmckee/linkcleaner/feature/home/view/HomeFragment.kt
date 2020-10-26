@@ -6,13 +6,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import androidx.core.view.isVisible
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
-import net.lachlanmckee.linkcleaner.AbstractBindingFragment
-import net.lachlanmckee.linkcleaner.databinding.HomeBinding
 import net.lachlanmckee.linkcleaner.di.viewmodel.ViewModelProviderFactory
 import net.lachlanmckee.linkcleaner.feature.home.viewmodel.HomeViewModel
 import net.lachlanmckee.linkcleaner.feature.home.viewmodel.State
@@ -20,67 +28,71 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : AbstractBindingFragment<HomeBinding>() {
+class HomeFragment : Fragment() {
   @Inject
   lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
   private val model: HomeViewModel by viewModels { viewModelProviderFactory }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val hasWindowFocus = view.hasWindowFocus()
-    Timber.d("onViewCreated. hasWindowFocus: $hasWindowFocus")
-    if (hasWindowFocus) {
-      listenToState()
-    } else {
-      view.viewTreeObserver.addOnWindowFocusChangeListener(object :
-          ViewTreeObserver.OnWindowFocusChangeListener {
-          override fun onWindowFocusChanged(hasFocus: Boolean) {
-            if (hasFocus) {
-              listenToState()
-              view.viewTreeObserver.removeOnWindowFocusChangeListener(this)
-            }
-          }
-        })
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    return ComposeView(requireContext()).apply {
+      setContent {
+        screen()
+      }
     }
+  }
+
+  @Composable
+  private fun screen() {
+    model.state.observeAsState(State.Empty).value.let { state ->
+      when (state) {
+        State.Empty -> {
+          noLinkFoundState()
+        }
+        is State.LinkFound -> {
+          linkFoundState(state)
+        }
+      }
+    }
+  }
+
+  @Composable
+  private fun noLinkFoundState() {
+  }
+
+  @Composable
+  private fun linkFoundState(state: State.LinkFound) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+      urlText(state.originalUrl)
+      urlText(state.replacementUrl)
+      Button(
+        onClick = {
+          model.updateLink()
+          launchChrome()
+        },
+        content = { Text("Copy link and launch Chrome") }
+      )
+    }
+  }
+
+  @Composable
+  private fun urlText(text: String) {
+    Text(
+      text = text,
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(8.dp)
+    )
   }
 
   override fun onDestroyView() {
     Timber.d("onDestroyView")
     super.onDestroyView()
-  }
-
-  private fun listenToState() {
-    Timber.d("listenToState. observe")
-    model.state.observe(
-      viewLifecycleOwner,
-      Observer { state: State ->
-        Timber.d("listenToState. State: $state")
-        when (state) {
-          State.Empty -> {
-            binding.homeLaunch.isVisible = false
-            binding.homeOriginalUrl.isVisible = false
-            binding.homeReplacementUrl.isVisible = false
-          }
-          is State.LinkFound -> {
-            binding.homeLaunch.apply {
-              isVisible = true
-              setOnClickListener {
-                model.updateLink()
-                launchChrome()
-              }
-            }
-            binding.homeOriginalUrl.isVisible = true
-            binding.homeReplacementUrl.isVisible = true
-            binding.homeOriginalUrl.text = state.originalUrl
-            binding.homeReplacementUrl.text = state.replacementUrl
-          }
-        }
-      }
-    )
-  }
-
-  override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): HomeBinding {
-    return HomeBinding.inflate(inflater, container, false)
   }
 
   private fun launchChrome() {

@@ -16,12 +16,12 @@ plugins {
 }
 
 android {
-  compileSdkVersion(29)
+  compileSdkVersion(30)
 
   defaultConfig {
     applicationId = "net.lachlanmckee.linkcleaner"
     minSdkVersion(21)
-    targetSdkVersion(29)
+    targetSdkVersion(30)
     versionCode = System.getenv("BITRISE_BUILD_NUMBER")?.toIntOrNull() ?: 1
     versionName = "0.0.1"
 
@@ -60,7 +60,12 @@ android {
   }
 
   buildFeatures {
-    viewBinding = true
+    compose = true
+  }
+
+  composeOptions {
+    kotlinCompilerVersion = Dependencies.Kotlin.version
+    kotlinCompilerExtensionVersion = Dependencies.Compose.version
   }
 }
 
@@ -79,6 +84,14 @@ dependencies {
   implementation(Dependencies.AndroidX.lifecycleLiveDataKtx)
   implementation(Dependencies.AndroidX.navigationFragmentKtx)
   implementation(Dependencies.AndroidX.navigationUiKtx)
+
+  implementation(Dependencies.Compose.ui)
+  implementation(Dependencies.Compose.uiTooling)
+  implementation(Dependencies.Compose.foundation)
+  implementation(Dependencies.Compose.material)
+  implementation(Dependencies.Compose.iconsCore)
+  implementation(Dependencies.Compose.iconsExtended)
+  implementation(Dependencies.Compose.liveData)
 
   implementation(Dependencies.Network.okHttp)
   implementation(Dependencies.Analytics.firebaseAnalytics)
@@ -100,6 +113,7 @@ dependencies {
   androidTestImplementation(EspressoTestDependencies.espressoIntents)
   androidTestImplementation(EspressoTestDependencies.runner)
   androidTestImplementation(EspressoTestDependencies.rules)
+  androidTestImplementation(EspressoTestDependencies.composeTesting)
   androidTestImplementation(EspressoTestDependencies.navigation)
   androidTestImplementation(EspressoTestDependencies.daggerHiltAndroidTesting)
   kaptAndroidTest(Dependencies.Di.daggerHiltCompiler)
