@@ -73,6 +73,10 @@ kapt {
   correctErrorTypes = true
 }
 
+tasks.withType<Test> {
+  useJUnitPlatform()
+}
+
 dependencies {
   implementation(Dependencies.Kotlin.stdlib)
 
@@ -105,7 +109,9 @@ dependencies {
 
   implementation(Dependencies.Logging.timber)
 
-  testImplementation(UnitTestDependencies.junit)
+  testImplementation(UnitTestDependencies.junitJupiterEngine)
+  testImplementation(UnitTestDependencies.junitJupiterApi)
+  testImplementation(UnitTestDependencies.mockk)
 
   debugImplementation(EspressoTestDependencies.fragmentTesting)
   androidTestImplementation(EspressoTestDependencies.junit)
