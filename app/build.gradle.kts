@@ -112,6 +112,7 @@ dependencies {
   testImplementation(UnitTestDependencies.junitJupiterEngine)
   testImplementation(UnitTestDependencies.junitJupiterApi)
   testImplementation(UnitTestDependencies.mockk)
+  testImplementation(UnitTestDependencies.coroutinesTest)
 
   debugImplementation(EspressoTestDependencies.fragmentTesting)
   androidTestImplementation(EspressoTestDependencies.junit)

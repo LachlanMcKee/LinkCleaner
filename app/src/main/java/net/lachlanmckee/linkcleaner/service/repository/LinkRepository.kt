@@ -1,9 +1,5 @@
 package net.lachlanmckee.linkcleaner.service.repository
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -19,11 +15,9 @@ interface LinkRepository {
   fun updateLink(linkData: LinkData)
 }
 
-class LinkRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) : LinkRepository {
-
-  private val clipboardManager: ClipboardManager by lazy {
-    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-  }
+class LinkRepositoryImpl @Inject constructor(
+  private val clipboardManager: ClipboardManager
+) : LinkRepository {
 
   @ExperimentalCoroutinesApi
   override fun getLink(): Flow<LinkData?> {
@@ -37,18 +31,13 @@ class LinkRepositoryImpl @Inject constructor(@ApplicationContext private val con
         Timber.d("getLink. newLinkData: $newLinkData")
         offer(newLinkData)
       }
-      clipboardManager.addPrimaryClipChangedListener(clipboardListener)
-      awaitClose { clipboardManager.removePrimaryClipChangedListener(clipboardListener) }
+      clipboardManager.addClipChangedListener(clipboardListener)
+      awaitClose { clipboardManager.removeClipChangedListener(clipboardListener) }
     }
   }
 
   private fun getClipboardLinkData(): LinkData? {
-    val originalHttpUrl = clipboardManager
-      .primaryClip
-      ?.getItemAt(0)
-      ?.text
-      ?.toString()
-      ?.toHttpUrlOrNull()
+    val originalHttpUrl = clipboardManager.clipText?.toHttpUrlOrNull()
 
     return originalHttpUrl?.let { httpUrl ->
       val replacementHttpUrl = HttpUrl.Builder()
@@ -63,11 +52,9 @@ class LinkRepositoryImpl @Inject constructor(@ApplicationContext private val con
   }
 
   override fun updateLink(linkData: LinkData) {
-    clipboardManager.setPrimaryClip(
-      ClipData.newPlainText(
-        "Cleaned Link",
-        linkData.replacementHttpUrl.toString()
-      )
+    clipboardManager.setClipText(
+      "Cleaned Link",
+      linkData.replacementHttpUrl.toString()
     )
   }
 }
